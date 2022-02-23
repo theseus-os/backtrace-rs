@@ -47,7 +47,7 @@ use core::fmt;
 ///     });
 /// }
 /// ```
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", target_os = "theseus"))]
 pub fn trace<F: FnMut(&Frame) -> bool>(cb: F) {
     let _guard = crate::lock::lock();
     unsafe { trace_unsynchronized(cb) }
@@ -154,6 +154,10 @@ cfg_if::cfg_if! {
         pub(crate) use self::dbghelp::Frame as FrameImp;
         #[cfg(target_env = "msvc")] // only used in dbghelp symbolize
         pub(crate) use self::dbghelp::StackFrame;
+    } else if #[cfg(target_os = "theseus")] {
+        mod theseus;
+        use self::theseus::trace as trace_imp;
+        pub(crate) use self::theseus::Frame as FrameImp;
     } else {
         mod noop;
         use self::noop::trace as trace_imp;

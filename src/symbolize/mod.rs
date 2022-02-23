@@ -478,6 +478,9 @@ cfg_if::cfg_if! {
     ))] {
         mod gimli;
         use gimli as imp;
+    } else if #[cfg(target_os = "theseus")] {
+        mod theseus;
+        use theseus as imp;  
     } else {
         mod noop;
         use noop as imp;

@@ -1,9 +1,16 @@
 use crate::PrintFmt;
 use crate::{resolve, resolve_frame, trace, BacktraceFmt, Symbol, SymbolName};
-use std::ffi::c_void;
-use std::fmt;
-use std::path::{Path, PathBuf};
-use std::prelude::v1::*;
+use core::ffi::c_void;
+use core::fmt;
+
+cfg_if::cfg_if! {
+    if #[cfg(feature = "std")] {
+        use std::path::{Path, PathBuf};
+        use std::prelude::v1::*;
+    } else if #[cfg(target_os = "theseus")] {
+        use alloc::vec::Vec;
+    }
+}
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
@@ -381,10 +388,12 @@ impl fmt::Debug for Backtrace {
         // we just print the path as-is. Note that we also only do this for the
         // short format, because if it's full we presumably want to print
         // everything.
+        #[cfg(feature = "std")]
         let cwd = std::env::current_dir();
         let mut print_path =
             move |fmt: &mut fmt::Formatter<'_>, path: crate::BytesOrWideString<'_>| {
                 let path = path.into_path_buf();
+                #[cfg(feature = "std")]
                 if !full {
                     if let Ok(cwd) = &cwd {
                         if let Ok(suffix) = path.strip_prefix(cwd) {

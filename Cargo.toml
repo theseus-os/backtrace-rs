@@ -40,12 +40,21 @@ cpp_demangle = { default-features = false, version = "0.3.0", optional = true }
 
 # Optional dependencies enabled through the `gimli-symbolize` feature, do not
 # use these features directly.
+# Note: Theseus does not need these dependencies, as only `gimli` modules use them.
+[target.'cfg(not(target_os = "theseus"))'.dependencies]
 addr2line = { version = "0.17.0", default-features = false }
 miniz_oxide = { version = "0.4.0", default-features = false }
-[dependencies.object]
+[target.'cfg(not(target_os = "theseus"))'.dependencies.object]
 version = "0.27.0"
 default-features = false
 features = ['read_core', 'elf', 'macho', 'pe', 'unaligned', 'archive']
+
+[target.'cfg(target_os = "theseus")'.dependencies]
+theseus_stack_trace = { path = "../../kernel/stack_trace", package = "stack_trace" }
+thread_local_macro = { path = "../../kernel/thread_local_macro" }
+mutex_sleep = { path = "../../kernel/mutex_sleep" }
+theseus_memory = { path = "../../kernel/memory", package = "memory" }
+spin = "0.9.0"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", optional = true }

@@ -127,8 +127,10 @@ mod print;
 pub use print::{BacktraceFmt, BacktraceFrameFmt, PrintFmt};
 
 cfg_if::cfg_if! {
-    if #[cfg(feature = "std")] {
+    if #[cfg(any(feature = "std", target_os = "theseus"))] {
         pub use self::backtrace::trace;
+        // TODO: in the future, add all the below to this theseus-inclusive conditional.
+    } else if #[cfg(feature = "std")] {
         pub use self::symbolize::{resolve, resolve_frame};
         pub use self::capture::{Backtrace, BacktraceFrame, BacktraceSymbol};
         mod capture;
@@ -150,11 +152,22 @@ impl Drop for Bomb {
 }
 
 #[allow(dead_code)]
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", target_os = "theseus"))]
 mod lock {
-    use std::boxed::Box;
-    use std::cell::Cell;
-    use std::sync::{Mutex, MutexGuard, Once};
+    cfg_if::cfg_if! {
+        if #[cfg(feature = "std")] {
+            use std::boxed::Box;
+            use std::cell::Cell;
+            use std::sync::{Mutex, MutexGuard, Once};
+        } 
+        else if #[cfg(target_os = "theseus")] {
+            use alloc::boxed::Box;
+            use core::cell::Cell;
+            use thread_local_macro::thread_local;
+            use mutex_sleep::{MutexSleep as Mutex, MutexSleepGuard as MutexGuard};
+            use spin::Once;
+        }
+    }
 
     pub struct LockGuard(Option<MutexGuard<'static, ()>>);
 
