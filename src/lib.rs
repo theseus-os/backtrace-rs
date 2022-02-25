@@ -130,8 +130,6 @@ cfg_if::cfg_if! {
     if #[cfg(any(feature = "std", target_os = "theseus"))] {
         pub use self::backtrace::trace;
         pub use self::symbolize::{resolve, resolve_frame};
-    } else if #[cfg(feature = "std")] {
-        // TODO: in the future, add all the below to this theseus-inclusive conditional.
         pub use self::capture::{Backtrace, BacktraceFrame, BacktraceSymbol};
         mod capture;
     }

@@ -9,6 +9,8 @@ cfg_if::cfg_if! {
         use std::prelude::v1::*;
     } else if #[cfg(target_os = "theseus")] {
         use alloc::vec::Vec;
+        use alloc::borrow::ToOwned;
+        use theseus_path_std::{Path, PathBuf};
     }
 }
 

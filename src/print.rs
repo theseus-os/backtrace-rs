@@ -1,4 +1,4 @@
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", target_os = "theseus"))]
 use super::{BacktraceFrame, BacktraceSymbol};
 use super::{BytesOrWideString, Frame, SymbolName};
 use core::ffi::c_void;
@@ -106,7 +106,7 @@ impl BacktraceFrameFmt<'_, '_, '_> {
     ///
     /// This function requires the `std` feature of the `backtrace` crate to be
     /// enabled, and the `std` feature is enabled by default.
-    #[cfg(feature = "std")]
+    #[cfg(any(feature = "std", target_os = "theseus"))]
     pub fn backtrace_frame(&mut self, frame: &BacktraceFrame) -> fmt::Result {
         let symbols = frame.symbols();
         for symbol in symbols {
@@ -124,7 +124,7 @@ impl BacktraceFrameFmt<'_, '_, '_> {
     ///
     /// This function requires the `std` feature of the `backtrace` crate to be
     /// enabled, and the `std` feature is enabled by default.
-    #[cfg(feature = "std")]
+    #[cfg(any(feature = "std", target_os = "theseus"))]
     pub fn backtrace_symbol(
         &mut self,
         frame: &BacktraceFrame,
