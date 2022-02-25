@@ -54,6 +54,7 @@ theseus_stack_trace = { path = "../../kernel/stack_trace", package = "stack_trac
 thread_local_macro = { path = "../../kernel/thread_local_macro" }
 mutex_sleep = { path = "../../kernel/mutex_sleep" }
 theseus_memory = { path = "../../kernel/memory", package = "memory" }
+theseus_path_std = { path = "../../ports/path_std", package = "path_std" }
 spin = "0.9.0"
 
 [target.'cfg(windows)'.dependencies]

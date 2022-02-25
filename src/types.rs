@@ -7,6 +7,12 @@ cfg_if::cfg_if! {
         use std::path::PathBuf;
         use std::prelude::v1::*;
         use std::str;
+    } else if #[cfg(target_os = "theseus")] {
+        use alloc::borrow::Cow;
+        use alloc::string::String;
+        use core::fmt;
+        use theseus_path_std::PathBuf;
+        use core::str;
     }
 }
 
@@ -21,7 +27,7 @@ pub enum BytesOrWideString<'a> {
     Wide(&'a [u16]),
 }
 
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", target_os = "theseus"))]
 impl<'a> BytesOrWideString<'a> {
     /// Lossy converts to a `Cow<str>`, will allocate if `Bytes` is not valid
     /// UTF-8 or if `BytesOrWideString` is `Wide`.
@@ -75,7 +81,7 @@ impl<'a> BytesOrWideString<'a> {
     }
 }
 
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", target_os = "theseus"))]
 impl<'a> fmt::Display for BytesOrWideString<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.to_str_lossy().fmt(f)

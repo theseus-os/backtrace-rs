@@ -120,7 +120,7 @@ mod symbolize;
 pub use self::types::BytesOrWideString;
 mod types;
 
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", target_os = "theseus"))]
 pub use self::symbolize::clear_symbol_cache;
 
 mod print;
@@ -129,9 +129,9 @@ pub use print::{BacktraceFmt, BacktraceFrameFmt, PrintFmt};
 cfg_if::cfg_if! {
     if #[cfg(any(feature = "std", target_os = "theseus"))] {
         pub use self::backtrace::trace;
-        // TODO: in the future, add all the below to this theseus-inclusive conditional.
-    } else if #[cfg(feature = "std")] {
         pub use self::symbolize::{resolve, resolve_frame};
+    } else if #[cfg(feature = "std")] {
+        // TODO: in the future, add all the below to this theseus-inclusive conditional.
         pub use self::capture::{Backtrace, BacktraceFrame, BacktraceSymbol};
         mod capture;
     }

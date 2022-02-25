@@ -4,6 +4,8 @@ cfg_if::cfg_if! {
     if #[cfg(feature = "std")] {
         use std::path::Path;
         use std::prelude::v1::*;
+    } else if #[cfg(target_os = "theseus")] {
+        use theseus_path_std::Path;
     }
 }
 
@@ -57,7 +59,7 @@ use rustc_demangle::{try_demangle, Demangle};
 ///     });
 /// }
 /// ```
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", target_os = "theseus"))]
 pub fn resolve<F: FnMut(&Symbol)>(addr: *mut c_void, cb: F) {
     let _guard = crate::lock::lock();
     unsafe { resolve_unsynchronized(addr, cb) }
@@ -99,7 +101,7 @@ pub fn resolve<F: FnMut(&Symbol)>(addr: *mut c_void, cb: F) {
 ///     });
 /// }
 /// ```
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", target_os = "theseus"))]
 pub fn resolve_frame<F: FnMut(&Symbol)>(frame: &Frame, cb: F) {
     let _guard = crate::lock::lock();
     unsafe { resolve_frame_unsynchronized(frame, cb) }
@@ -246,7 +248,7 @@ impl Symbol {
     ///
     /// This function requires the `std` feature of the `backtrace` crate to be
     /// enabled, and the `std` feature is enabled by default.
-    #[cfg(feature = "std")]
+    #[cfg(any(feature = "std", target_os = "theseus"))]
     #[allow(unreachable_code)]
     pub fn filename(&self) -> Option<&Path> {
         self.inner.filename()
@@ -263,7 +265,7 @@ impl fmt::Debug for Symbol {
             d.field("addr", &addr);
         }
 
-        #[cfg(feature = "std")]
+        #[cfg(any(feature = "std", target_os = "theseus"))]
         {
             if let Some(filename) = self.filename() {
                 d.field("filename", &filename);
@@ -455,7 +457,7 @@ cfg_if::cfg_if! {
 /// facilities to deallocate state and manage the allocated memory. For now the
 /// `gimli-symbolize` feature of this crate is the only feature where this
 /// function has any effect.
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", target_os = "theseus"))]
 pub fn clear_symbol_cache() {
     let _guard = crate::lock::lock();
     unsafe {

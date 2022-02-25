@@ -6,7 +6,7 @@ use theseus_stack_trace::{CrateNamespace, stack_trace};
 
 #[inline(always)]
 pub fn trace(callback: &mut dyn FnMut(&super::Frame) -> bool) {
-    stack_trace(
+    let _ignored_result = stack_trace(
         &mut |stack_frame, stack_frame_iter| {
             // Construct a `Frame` that we can pass to the `callback` function.
             // See the doc comments for the `Frame` struct below for more info.
