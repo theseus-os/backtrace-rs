@@ -10,7 +10,7 @@ cfg_if::cfg_if! {
     } else if #[cfg(target_os = "theseus")] {
         use alloc::vec::Vec;
         use alloc::borrow::ToOwned;
-        use theseus_path_std::{Path, PathBuf};
+        use theseus_std::path::{Path, PathBuf};
     }
 }
 

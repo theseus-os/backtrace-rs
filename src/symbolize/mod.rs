@@ -5,7 +5,7 @@ cfg_if::cfg_if! {
         use std::path::Path;
         use std::prelude::v1::*;
     } else if #[cfg(target_os = "theseus")] {
-        use theseus_path_std::Path;
+        use theseus_std::path::Path;
     }
 }
 

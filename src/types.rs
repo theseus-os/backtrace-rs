@@ -11,7 +11,7 @@ cfg_if::cfg_if! {
         use alloc::borrow::Cow;
         use alloc::string::String;
         use core::fmt;
-        use theseus_path_std::PathBuf;
+        use theseus_std::path::PathBuf;
         use core::str;
     }
 }

@@ -5,7 +5,7 @@ use core::ffi::c_void;
 use core::marker;
 use alloc::sync::Arc;
 use theseus_stack_trace::{CrateNamespace, StrongSectionRef};
-use theseus_path_std::Path;
+use theseus_std::path::Path;
 
 
 pub unsafe fn resolve(what: ResolveWhat<'_>, callback: &mut dyn FnMut(&super::Symbol)) {
