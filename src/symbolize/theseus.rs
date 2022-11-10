@@ -46,7 +46,7 @@ impl Symbol<'_> {
     }
 
     pub fn addr(&self) -> Option<*mut c_void> {
-        Some(self.sec.start_address().value() as *mut _)
+        Some(self.sec.virt_addr.value() as *mut _)
     }
 
     pub fn filename_raw(&self) -> Option<BytesOrWideString<'_>> {
