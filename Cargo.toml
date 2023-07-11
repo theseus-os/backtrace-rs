@@ -52,7 +52,7 @@ features = ['read_core', 'elf', 'macho', 'pe', 'unaligned', 'archive']
 [target.'cfg(target_os = "theseus")'.dependencies]
 theseus_stack_trace = { path = "../../kernel/stack_trace", package = "stack_trace" }
 thread_local_macro = { path = "../../kernel/thread_local_macro" }
-mutex_sleep = { path = "../../kernel/mutex_sleep" }
+sync_block = { path = "../../kernel/sync_block", features = ["std-api"] }
 theseus_memory = { path = "../../kernel/memory", package = "memory" }
 theseus_std = { path = "../../ports/theseus_std" }
 spin = "0.9.4"
