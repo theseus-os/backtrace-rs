@@ -162,8 +162,8 @@ mod lock {
             use alloc::boxed::Box;
             use core::cell::Cell;
             use thread_local_macro::thread_local;
-            use mutex_sleep::{MutexSleep as Mutex, MutexSleepGuard as MutexGuard};
             use spin::Once;
+            use sync_block::std_api::{Mutex, MutexGuard};
         }
     }
 
